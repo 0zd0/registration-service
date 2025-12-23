@@ -12,6 +12,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.protobuf.ByteString;
+import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import java.time.Clock;
@@ -58,6 +59,7 @@ import org.signal.registration.util.UUIDUtil;
  * and verification code sender selection.
  */
 @Singleton
+@Requires(notEnv = Environments.ANALYTICS)
 public class RegistrationService {
 
   private final SenderSelectionStrategy senderSelectionStrategy;
