@@ -13,5 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 @Context
 @ConfigurationProperties("sinch.sms.price-sheet.gcp")
 @Requires(env = Environment.GOOGLE_COMPUTE)
+@Requires(notEnv = Environment.TEST)
 public record GcpSinchPriceSheetConfiguration(@NotBlank String bucketName, @NotBlank String objectName) {
 }
