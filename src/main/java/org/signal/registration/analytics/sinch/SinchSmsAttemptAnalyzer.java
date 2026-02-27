@@ -86,12 +86,10 @@ public class SinchSmsAttemptAnalyzer extends AbstractAttemptAnalyzer {
 
   @Override
   protected AttemptAnalysis analyzeAttempt(final AttemptPendingAnalysis attemptPendingAnalysis) {
-    // Unfortunately, there is no `price` property on the SMS resource in the Sinch API yet, so we only get the
-    // estimated price
     final String regionCode = attemptPendingAnalysis.getRegion().toUpperCase(Locale.ROOT);
-    final Optional<Money> estimatedPrice = Optional.ofNullable(regionToPrice.get(regionCode));
-    return new AttemptAnalysis(Optional.empty(),
-        estimatedPrice,
+    final Optional<Money> price = Optional.ofNullable(regionToPrice.get(regionCode));
+    return new AttemptAnalysis(price,
+        Optional.empty(),
         Optional.empty(),
         Optional.empty());
   }

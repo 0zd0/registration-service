@@ -39,8 +39,8 @@ class SinchSmsAttemptAnalyzerTest {
     final AttemptPendingAnalysis attemptPendingAnalysis = mock(AttemptPendingAnalysis.class);
     when(attemptPendingAnalysis.getRegion()).thenReturn(regionCode);
     final AttemptAnalysis attemptAnalysis = analyzer.analyzeAttempt(attemptPendingAnalysis);
-    final Optional<Money> expectedEstimate = Optional.ofNullable(expectedPrice).map(amount -> new Money(amount, Currency.getInstance("USD")));
-    assertEquals(expectedEstimate, attemptAnalysis.estimatedPrice());
+    final Optional<Money> maybeExpectedPrice = Optional.ofNullable(expectedPrice).map(amount -> new Money(amount, Currency.getInstance("USD")));
+    assertEquals(maybeExpectedPrice, attemptAnalysis.price());
   }
 
   static Stream<Arguments> analyzeAttempt() {
