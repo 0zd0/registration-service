@@ -402,7 +402,7 @@ public class RegistrationService {
 
     return sessionRepository.updateSession(UUIDUtil.uuidFromByteString(session.getId()), s -> {
       final RegistrationSession.Builder builder = s.toBuilder()
-          .setCheckCodeAttempts(session.getCheckCodeAttempts() + 1)
+          .setCheckCodeAttempts(s.getCheckCodeAttempts() + 1)
           .setLastCheckCodeAttemptEpochMillis(clock.millis());
 
       if (verifiedCode != null) {
