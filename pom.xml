@@ -33,6 +33,10 @@
     <!-- must be greater than or equal to the value from Google libraries-bom, see https://protobuf.dev/support/cross-version-runtime-guarantee/ -->
     <!-- the latest 4.x should be fine https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java/versions -->
     <protobuf.version>4.34.1</protobuf.version>
+    <!-- override property from micronaut-parent, as other dependencies need a newer version -->
+    <grpc.version>1.81.0</grpc.version>
+
+    <gax.version>2.80.0</gax.version>
 
     <!-- Note: always use the multi-arch manifest *LIST* here; see https://hub.docker.com/_/eclipse-temurin -->
     <docker.image>eclipse-temurin:25-jre-noble@sha256:d2975fcad8dc9ac2180c0c278c8ae7b3443d36cb80845cb0811c20d9463f5fee</docker.image>
@@ -50,7 +54,7 @@
       <dependency>
         <groupId>com.google.cloud</groupId>
         <artifactId>libraries-bom</artifactId>
-        <version>26.80.0</version>
+        <version>26.83.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -79,12 +83,13 @@
         <scope>import</scope>
       </dependency>
 
-      <!-- Micronaut's parent POM and Google's libraries-bom specify incompatible versions of gax -->
+      <!-- Micronaut's parent POM and Google's libraries-bom specify incompatible versions of gax. -->
       <dependency>
         <groupId>com.google.api</groupId>
-        <artifactId>gax</artifactId>
-        <version>2.79.0</version>
+        <artifactId>gax-bom</artifactId>
+        <version>${gax.version}</version>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
 
