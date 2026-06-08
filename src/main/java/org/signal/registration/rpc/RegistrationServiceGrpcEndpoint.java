@@ -15,7 +15,6 @@ import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.signal.registration.AttemptExpiredException;
@@ -47,11 +46,11 @@ public class RegistrationServiceGrpcEndpoint extends SimpleRegistrationServiceGr
   }
 
   @Override
-  protected Optional<Status> mapExceptionToStatus(final Throwable throwable) {
+  protected Throwable mapException(final Throwable throwable) {
     return switch (throwable) {
-      case IllegalArgumentException ignored -> Optional.of(Status.INVALID_ARGUMENT);
-      case UncheckedIOException ignored -> Optional.of(Status.INTERNAL);
-      default -> super.mapExceptionToStatus(throwable);
+      case IllegalArgumentException ignored -> Status.INVALID_ARGUMENT.asException();
+      case UncheckedIOException ignored -> Status.INTERNAL.asException();
+      default -> super.mapException(throwable);
     };
   }
 

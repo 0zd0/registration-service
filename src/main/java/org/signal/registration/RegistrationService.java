@@ -12,6 +12,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.protobuf.ByteString;
+import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import java.time.Clock;
@@ -58,6 +59,7 @@ import org.signal.registration.util.UUIDUtil;
  * and verification code sender selection.
  */
 @Singleton
+@Requires(notEnv = Environments.ANALYTICS)
 public class RegistrationService {
 
   private final SenderSelectionStrategy senderSelectionStrategy;
@@ -337,9 +339,9 @@ public class RegistrationService {
 
     final RegistrationSession session = sessionRepository.getSession(sessionId);
 
-    // If a connection was interrupted, a caller may repeat a verification request. Check to see if we already have a
-    // known verification code for this session and, if so, check the provided code against that code instead of making
-    // a call upstream.
+    // If a connection was interrupted, a caller may repeat a verification request. If a previous code was already
+    // verified, we can return the existing verified session without making another call to actually check the code
+    // (again).
     if (StringUtils.isNotBlank(session.getVerifiedCode())) {
       return session;
     }
@@ -400,7 +402,7 @@ public class RegistrationService {
 
     return sessionRepository.updateSession(UUIDUtil.uuidFromByteString(session.getId()), s -> {
       final RegistrationSession.Builder builder = s.toBuilder()
-          .setCheckCodeAttempts(session.getCheckCodeAttempts() + 1)
+          .setCheckCodeAttempts(s.getCheckCodeAttempts() + 1)
           .setLastCheckCodeAttemptEpochMillis(clock.millis());
 
       if (verifiedCode != null) {
